@@ -1,0 +1,136 @@
+<html>
+
+<head>
+    <title>Import to HANA Cloud sample</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>Import to HANA Cloud sample</h1>
+    <hr>
+    <div>Import File : <input type="file" id="csvfile" name="csvfile"></div>
+    <div><button id="autocommiton" onclick="sendautocommiton()">Autocommit on</button></div>
+    <div><button id="autocommitoff" onclick="sendautocommitoff()">Autocommit off</button></div>
+    <div><button id="useobjstore" onclick="senduseobjsore()">Use Object Store</button></div>
+    <hr>
+    <div>Message:</div>
+    <div id="messagearea"></div>
+
+    <script>
+        function sendautocommiton() {
+            const startTime = Date.now(); 
+            document.body.style.cursor = 'wait';
+            var formData = new FormData();
+            formData.append("csvfile", $("#csvfile")[0].files[0]);
+            document.getElementById("messagearea").innerText = "";
+            $.ajax({
+                type: 'post',
+                url: '/autocommitinsert',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                async: true,
+            }).done(function (data1, textStatus, jqXHR) {
+                //alert('成功');
+                //console.log(data1);
+
+                if (data1['message'] != 'OK') {
+                    document.getElementById("messagearea").innerText = "Error Occured." + data1['reason'];
+                    return;
+                }
+
+                if (data1['message'] == 'OK') {
+                    const endTime = Date.now();
+                    document.getElementById("messagearea").innerText = data1['reason'] +" "+(endTime - startTime)+" msec";
+                    return;
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                document.getElementById("messagearea").innerText = "Error Occured. : " + textStatus;
+                return;
+            }).always(function () {
+                console.log('complete');
+                document.body.style.cursor = 'auto';
+            });
+        }
+        function sendautocommitoff() {
+            const startTime = Date.now(); 
+            document.body.style.cursor = 'wait';
+            var formData = new FormData();
+            formData.append("csvfile", $("#csvfile")[0].files[0]);
+            document.getElementById("messagearea").innerText = "";
+            $.ajax({
+                type: 'post',
+                url: '/noautocommitinsert',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                async: true,
+            }).done(function (data1, textStatus, jqXHR) {
+                //alert('成功');
+                //console.log(data1);
+
+                if (data1['message'] != 'OK') {
+                    document.getElementById("messagearea").innerText = "Error Occured." + data1['reason'];
+                    return;
+                }
+
+                if (data1['message'] == 'OK') {
+                    const endTime = Date.now();
+                    document.getElementById("messagearea").innerText = data1['reason'] +" "+(endTime - startTime)+" msec";
+                    return;
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                document.getElementById("messagearea").innerText = "Error Occured. : " + textStatus;
+                return;
+            }).always(function () {
+                console.log('complete');
+                document.body.style.cursor = 'auto';
+            });
+
+        }
+        function senduseobjsore() {
+            const startTime = Date.now(); 
+            document.body.style.cursor = 'wait';
+            var formData = new FormData();
+            formData.append("csvfile", $("#csvfile")[0].files[0]);
+            document.getElementById("messagearea").innerText = "";
+            $.ajax({
+                type: 'post',
+                url: '/useobjstore',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                async: true,
+            }).done(function (data1, textStatus, jqXHR) {
+                //alert('成功');
+                //console.log(data1);
+
+                if (data1['message'] != 'OK') {
+                    document.getElementById("messagearea").innerText = "Error Occured." + data1['reason'];
+                    return;
+                }
+
+                if (data1['message'] == 'OK') {
+                    const endTime = Date.now();
+                    document.getElementById("messagearea").innerText = data1['reason'] +" "+(endTime - startTime)+" msec";
+                    return;
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                document.getElementById("messagearea").innerText = "Error Occured. : " + textStatus;
+                return;
+            }).always(function () {
+                console.log('complete');
+                document.body.style.cursor = 'auto';
+            });
+        }
+
+    </script>
+</body>
+
+</html>
